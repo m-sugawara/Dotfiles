@@ -7,6 +7,9 @@ set shiftwidth=4
 filetype off
 filetype plugin indent off
 
+let mapleader= ","
+noremap \ ,
+
 set runtimepath+=~/.vim/bundle/neobundle.vim
 
 call neobundle#begin(expand('~/.vim/bundle'))
@@ -28,6 +31,8 @@ inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 
+" exモード無効化
+nnoremap Q <Nop>
 
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'croaker/mustang-vim'
@@ -36,15 +41,37 @@ NeoBundle 'tomasr/molokai'
 
 " Unite
 NeoBundle 'Shougo/unite.vim'
+" Unite.vimで最近使ったファイルを表示できるようにする
+NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'ujihisa/unite-colorscheme'
+" 入力モードで開始する
 let g:unite_enable_start_insert=1
 let g:unite_source_history_yank_enable=1
 let g:unite_source_file_mru_limit=200
+" ヤンクの履歴
 nnoremap <silent> ,uy :<C-u>Unite history/yank<CR>
+" bufferの一覧
 nnoremap <silent> ,ub :<C-u>Unite buffer<CR>
 nnoremap <silent> ,uf :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 nnoremap <silent> ,ur :<C-u>Unite -buffer-name=register register<CR>
+" 最近使ったファイルの一覧とバッファを表示
 nnoremap <silent> ,uu :<C-u>Unite file_mru buffer<CR>
+" unite.vimを開いている間のキーマッピング
+autocmd FileType unite call s:unite_my_settings()
+function! s:unite_my_settings()"{{{
+    " ESCでuniteを終了
+    nmap <buffer> <ESC> <Plug>(unite_exit)
+    " C-nで次の行選択
+    " not working...
+    nmap <C-n> <Plug>(unite_select_next_line)
+endfunction"}}}
+
+" vimfiler
+NeoBundle 'Shougo/vimfiler'
+" :e .で起動する設定
+let g:vimfiler_as_default_explorer=1
+" 現在開いているバッファをIDE風に開く
+nnoremap <silent> <Leader>fi :<C-u>VimFilerBufferDir -split -simple -winwidth=35 -no-quit<CR>
 
 if &term =~ "xterm-256color" || "screen-256color"
   set t_Co=256
