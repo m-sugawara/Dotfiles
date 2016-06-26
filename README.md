@@ -1,4 +1,4 @@
-# MyVimrc
+# Dotfiles
 vimrc setting
 
 ## Usage
